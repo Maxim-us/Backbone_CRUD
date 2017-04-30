@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>CRUD Users</title>
+</head>
+<body>
+
+<form action="/" id="addUser">
+	<input type="text" id="userName" placeholder="Имя" />
+	<input type="text" id="userAge" placeholder="Возраст" />
+	<input type="text" id="userJob" placeholder="Работа" />
+	<input type="submit" value="Добавить пользователя">
+</form>
+
+<div class="mx-app_wrap"></div>
+
+<!-- JS -->
+<script src="add/jquery-3.2.0.js"></script>	
+<script src="add/underscore.js"></script>
+<script src="add/backbone.js"></script>
+<!-- 
+<script src="add/backbone-validation.js"></script>
+ -->
+<!-- templates -->
+<script type="text/template" id="templateUsers">
+	<span><u class="changeName"><%= name %></u> </span>
+	(<span class="changeAge"><%= age %></span>)
+	<span class="changeJob"> <%= job %> </span><button id="deleteUser">Delete</button>
+</script>
+
+
+
+
+<!-- My API -->
+<script src="js/main.js"></script>
+<script src="js/Models.js"></script>
+<script src="js/Views.js"></script>
+<script src="js/Collections.js"></script>
+<!-- <script src="js/Routers.js"></script> -->
+
+
+<script>
+	( function(){
+
+		// **************** Init ******************
+
+		// Model
+		var modelUser = new App.Models.User;
+
+		// Collection
+		var collectionUsers = new App.Collections.Users( [
+			{
+				name: 'Vasya',
+				age: 27,
+				job: 'Слесарь'
+			},
+			{
+				name: 'Petya',
+				age: 25,
+				job: 'Монтажник'
+			},
+			{
+				name: 'Sanya',
+				age: 18,
+				job: 'Студент'
+			}
+		] );
+
+		// View collections
+		var viewUsers = new App.Views.Users( {
+			collection: collectionUsers
+		} );
+
+		// View add form
+		var addUser = new App.Views.AddUser( {
+			collection: collectionUsers
+		} );
+
+
+		// Append result
+		$( 'body' ).append( viewUsers.render().el );
+
+	} )();
+</script>
+	
+</body>
+</html>
