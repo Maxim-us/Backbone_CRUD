@@ -5,6 +5,10 @@ App.Views.User = Backbone.View.extend( {
 		this.model.on( 'invalid', function( model, error ){
 			alert( error );
 		} );
+
+		this.model.on( 'destroy', function(){
+			this.$el.remove();
+		}, this );
 	},
 
 	tagName: 'li',
@@ -29,13 +33,19 @@ App.Views.User = Backbone.View.extend( {
 	},
 
 	changeName: function( e ){
+
 		$( e.target ).attr( 'contenteditable', 'true' );
+
 	},
 	changeAge: function( e ){
+
 		$( e.target ).attr( 'contenteditable', 'true' );
+
 	},
 	changeJob: function( e ){
-		$( e.target ).attr( 'contenteditable', 'true' );		
+
+		$( e.target ).attr( 'contenteditable', 'true' );
+
 	},
 
 	saveChangeName: function( e ){
@@ -47,6 +57,7 @@ App.Views.User = Backbone.View.extend( {
 		
 	},
 	saveChangeAge: function( e ){
+
 		this.model.set( { 'age': $( e.target ).text() }, { 'validate': true } );
 		console.log( this.model );
 
@@ -63,6 +74,8 @@ App.Views.User = Backbone.View.extend( {
 	},
 
 	deleteUser: function(){
+
+		this.model.destroy();
 
 	}
 
@@ -130,9 +143,8 @@ App.Views.AddUser = Backbone.View.extend( {
 
 		}
 
-
-		
-
 	}
 
 } );
+
+// Проверка коллекции на удаление модели
