@@ -3,7 +3,7 @@ App.Views.User = Backbone.View.extend( {
 
 	initialize: function(){
 		this.model.on( 'invalid', function( model, error ){
-			alert( error );
+			console.log( error );
 		} );
 
 		this.model.on( 'destroy', function(){
@@ -13,7 +13,7 @@ App.Views.User = Backbone.View.extend( {
 
 	tagName: 'li',
 
-	template: templateHelper( 'templateUsers' ),
+	template: templateHelper( 'templateEditUsers' ),
 
 	render: function(){
 		this.$el.append( this.template( this.model.toJSON() ) );
@@ -95,9 +95,9 @@ App.Views.Users = Backbone.View.extend( {
 		return this;
 	},
 
-	addUser: function( modelUser ){
-		var viewUser = new App.Views.User( { model: modelUser } );
-		this.$el.append( viewUser.render().el );
+	addUser: function( model ){
+		var viewUser = new App.Views.User( { model: model } );
+		this.$el.append( viewUser.render().el );		
 	}
 
 } );
@@ -140,6 +140,7 @@ App.Views.AddUser = Backbone.View.extend( {
 
 			this.collection.add( newUser );		
 			//console.log( this.collection.length );
+			this.$el.trigger( 'reset' );
 
 		}
 

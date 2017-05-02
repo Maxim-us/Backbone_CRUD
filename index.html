@@ -3,8 +3,56 @@
 <head>
 	<meta charset="UTF-8">
 	<title>CRUD Users</title>
+
+	<style>
+		nav{
+			display: table;
+			width: 100%;
+			clear: both;
+			margin: 25px;
+		}
+		nav li{
+			float: left;
+			list-style-type: none;
+		}
+		nav li a{
+			padding: 10px 20px;
+		}
+		.changeName:focus,
+		.changeAge:focus,
+		.changeJob:focus{
+			font-size: 20px;
+			outline: 2px solid green;
+			padding: 5px 10px;
+		}
+		#addUser{
+			display: none;
+		}
+		.mx-app_wrap #addUser{
+			display: block;
+		}
+	</style>
 </head>
 <body>
+
+<nav>
+	<ul>
+		<li>
+			<a href="#listUsers">Список пользователей</a>
+		</li>
+		<li>
+			<a href="#editUser">Редактировать данные</a>
+		</li>
+		<li>
+			<a href="#addUser">Добавить пользователя</a>
+		</li>
+		<li>
+			<a href="#deleteUser">Удалить данные</a>
+		</li>
+	</ul>
+</nav>
+
+<div class="mx-app_wrap"></div>
 
 <form action="/" id="addUser">
 	<input type="text" id="userName" placeholder="Имя" />
@@ -13,24 +61,45 @@
 	<input type="submit" value="Добавить пользователя">
 </form>
 
-<div class="mx-app_wrap"></div>
-
 <!-- JS -->
 <script src="add/jquery-3.2.0.js"></script>	
 <script src="add/underscore.js"></script>
 <script src="add/backbone.js"></script>
-<!-- 
-<script src="add/backbone-validation.js"></script>
- -->
-<!-- templates -->
-<script type="text/template" id="templateUsers">
-	<span><u class="changeName"><%= name %></u> </span>
-	(<span class="changeAge"><%= age %></span>)
-	<span class="changeJob"> <%= job %> </span><button id="deleteUser">Delete</button>
-</script>
 
+<!-- ********************* Templates ************************* -->
+<!-- *                                                       * -->
+<!-- *                                                       * -->
+	<!-- deletePage -->
+	<script type="text/template" id="templateListUsers">
+		<span><u><%= name %></u> </span>
+		(<span><%= age %></span>)
+		<span> <%= job %> </span>
+	</script>
 
+	<!-- editPage -->
+	<script type="text/template" id="templateEditUsers">
+		<span><u class="changeName"><%= name %></u> </span>
+		(<span class="changeAge"><%= age %></span>)
+		<span class="changeJob"> <%= job %> </span>
+	</script>
 
+	<!-- deletePage -->
+	<script type="text/template" id="templateDeleteUsers">
+		<span><u><%= name %></u> </span>
+		(<span><%= age %></span>)
+		<span> <%= job %> </span><button id="deleteUser">Delete</button>
+	</script>
+
+	<!-- addPage -->
+	<script type="text/template" id="templateAddUsers">
+		<span><u><%= name %></u> </span>
+		(<span><%= age %></span>)
+		<span> <%= job %> </span>
+	</script>
+
+<!-- *                                                       * -->
+<!-- *                                                       * -->
+<!-- ********************* Templates ************************* -->
 
 <!-- My API -->
 <script src="js/main.js"></script>
@@ -38,51 +107,7 @@
 <script src="js/Views.js"></script>
 <script src="js/Collections.js"></script>
 <script src="js/Routers.js"></script>
-
-
-<script>
-	( function(){
-
-		// **************** Init ******************
-
-		// Model
-		var modelUser = new App.Models.User;
-
-		// Collection
-		var collectionUsers = new App.Collections.Users( [
-			{
-				name: 'Vasya',
-				age: 27,
-				job: 'Слесарь'
-			},
-			{
-				name: 'Petya',
-				age: 25,
-				job: 'Монтажник'
-			},
-			{
-				name: 'Sanya',
-				age: 18,
-				job: 'Студент'
-			}
-		] );
-
-		// View collections
-		var viewUsers = new App.Views.Users( {
-			collection: collectionUsers
-		} );
-
-		// View add form
-		var addUser = new App.Views.AddUser( {
-			collection: collectionUsers
-		} );
-
-
-		// Append result
-		$( 'body' ).append( viewUsers.render().el );
-
-	} )();
-</script>
+<script src="js/Init.js"></script>
 	
 </body>
 </html>
