@@ -1,12 +1,13 @@
 ( function(){
 
-	var $form = $( '#addUser' );
+	var $form = $( '#addUserForm' );
 
 	// Model
 	var modelUser = new App.Models.User;
 
 	// Collection
 	var collectionUsers = new App.Collections.Users( [
+
 		{
 			name: 'Василий',
 			age: 27,
@@ -22,6 +23,7 @@
 			age: 18,
 			job: 'Студент'
 		}
+
 	] );
 
 	// Router
@@ -29,53 +31,58 @@
 
 		start: function(){
 			
-			$( '.mx-app_wrap' ).empty();
-			$( '.mx-app_wrap' ).append( $( '<h1>Список пользователей</h1>' ) );
+			$( '.mx-app_info' ).empty();
+			$( '.mx-app_info' ).append( $( '<h1>Список пользователей</h1>' ) );
 
-			// view for start page
-			helperRouterView( 'templateListUsers', modelUser, collectionUsers );
+			// Change template
+			templateChange( Backbone.history.getFragment() );
 
 		},
 
 		editPage: function(){
 			
-			$( '.mx-app_wrap' ).empty();
-			$( '.mx-app_wrap' ).append( $( '<h1>Редактирование данных пользователей</h1>' ) );
-			$( '.mx-app_wrap' ).append( $( '<h3>Кликните по строке, которую нужно изменить</h3>' ) );
+			$( '.mx-app_info' ).empty();
+			$( '.mx-app_info' ).append( $( '<h1>Редактирование данных пользователей</h1>' ) );
+			$( '.mx-app_info' ).append( $( '<h3>Кликните по строке, которую нужно изменить</h3>' ) );
+			$( '.mx-app_info' ).append( $( '<span class="editError hidden"></span>' ) );
 
-			// view for edit page
-			helperRouterView( 'templateEditUsers', modelUser, collectionUsers );
+			// Change template
+			templateChange( Backbone.history.getFragment() );
 
 		},
 
 		addPage: function(){
 
-			$( '.mx-app_wrap' ).empty();
-			$( '.mx-app_wrap' ).append( $( '<h1>Добавить пользователя</h1>' ) );
-			$( '.mx-app_wrap' ).append( $( $form ) );
+			$( '.mx-app_info' ).empty();
+			$( '.mx-app_info' ).append( $( '<h1>Добавление пользователя</h1>' ) );
 
-			// view add form
-			var addUser = new App.Views.AddUser( {
-				collection: collectionUsers
-			} );
+			// Change template
+			templateChange( Backbone.history.getFragment() );
 
-			// view for delete page
-			helperRouterView( 'templateAddUsers', modelUser, collectionUsers );	
 		},
 
 		deletePage: function(){
 
-			$( '.mx-app_wrap' ).empty();
-			$( '.mx-app_wrap' ).append( $( '<h1>Удаление пользователя</h1>' ) );
+			$( '.mx-app_info' ).empty();
+			$( '.mx-app_info' ).append( $( '<h1>Удаление пользователя</h1>' ) );
 
-			// view for delete page
-			helperRouterView( 'templateDeleteUsers', modelUser, collectionUsers );	
+			// Change template
+			templateChange( Backbone.history.getFragment() );
+
 		}
 
 	} );
 
 	// Router
-	new childRouter;
+	var locationHash = new childRouter;
 	Backbone.history.start();
+
+	// view add form
+	var addUser = new App.Views.AddUser( {
+		collection: collectionUsers
+	} );
+
+	var viewUsers = new App.Views.Users( { collection: collectionUsers } );
+	$( '.mx-app_wrap' ).append( viewUsers.render().el );
 
 } )();

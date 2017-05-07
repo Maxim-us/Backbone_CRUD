@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>CRUD Users</title>
+	<title>Backbone_CRUD Users</title>
+
+	<link rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.css">
 
 	<style>
 		nav{
@@ -25,17 +27,25 @@
 			outline: 2px solid green;
 			padding: 5px 10px;
 		}
-		#addUser{
+		#addUserForm{
 			display: none;
 		}
-		.mx-app_wrap #addUser{
+		.visible#addUserForm{
 			display: block;
+		}
+		form {
+		    padding: 0 20px;
+		}
+		.editError{
+			border: 1px solid red;
+			color: red;
+			display: table;
 		}
 	</style>
 </head>
 <body>
 
-<nav>
+<nav id="nav">
 	<ul>
 		<li>
 			<a href="#listUsers">Список пользователей</a>
@@ -52,62 +62,69 @@
 	</ul>
 </nav>
 
-<div class="mx-app_wrap"></div>
+<div class="mx-app_info"></div>
 
-<form action="/" id="addUser">
-	<input type="text" id="userName" placeholder="Имя" />
-	<input type="text" id="userAge" placeholder="Возраст" />
-	<input type="text" id="userJob" placeholder="Работа" />
-	<input type="submit" value="Добавить пользователя">
+<form class="form-horizontal container-fluid" id="addUserForm" role="form">
+	<div class="row">
+		<div class="form-group col-md-3">
+	        <label for="name" class="col-lg-2 control-label">Имя</label>
+	        <div class="col-lg-10">
+	            <input type="text" class="form-control" id="name" name="name" />
+	            <span class="help-block hidden"></span>
+	        </div>
+	    </div>
+	    <div class="form-group col-md-3">
+	        <label for="age" class="col-lg-2 control-label">Возраст</label>
+	        <div class="col-lg-10">
+	            <input type="text" class="form-control" id="age" name="age" />
+	            <span class="help-block hidden"></span>
+	        </div>
+	    </div>
+	    <div class="form-group col-md-3">
+	        <label for="job" class="col-lg-2 control-label">Работа</label>
+	        <div class="col-lg-10">
+	            <input type="text" class="form-control" id="job" name="job" />
+	            <span class="help-block hidden"></span>
+	        </div>
+	    </div>
+
+	    <div class="form-group col-md-3">
+	        <div class="col-lg-offset-2 col-lg-10">
+	            <button type="submit" id="signUpButton" class="btn btn-success">Добавить</button>
+	        </div>
+	    </div>
+	</div>    
 </form>
+
+<div class="mx-app_wrap"></div>
 
 <!-- JS -->
 <script src="add/jquery-3.2.0.js"></script>	
 <script src="add/underscore.js"></script>
 <script src="add/backbone.js"></script>
+<script src="add/backbone-validation.js"></script>
 
-<!-- ********************* Templates ************************* -->
-<!-- *                                                       * -->
-<!-- *                                                       * -->
-	<!-- deletePage -->
+<!-- ********************* Template ************************* -->
+<!-- *                                                      * -->
+<!-- *                                                      * -->
+	<!-- template -->
 	<script type="text/template" id="templateListUsers">
-		<span><u><%= name %></u> </span>
-		(<span><%= age %></span>)
-		<span> <%= job %> </span>
+		<u><span class="changeName name"><%= name %> </span></u>
+		(<span class="changeAge age"><%= age %></span>)
+		<span class="changeJob job"> <%= job %> </span>
 	</script>
 
-	<!-- editPage -->
-	<script type="text/template" id="templateEditUsers">
-		<span><u class="changeName"><%= name %></u> </span>
-		(<span class="changeAge"><%= age %></span>)
-		<span class="changeJob"> <%= job %> </span>
-	</script>
+<!-- *                                                      * -->
+<!-- *                                                      * -->
+<!-- ********************* Template ************************* -->
 
-	<!-- deletePage -->
-	<script type="text/template" id="templateDeleteUsers">
-		<span><u><%= name %></u> </span>
-		(<span><%= age %></span>)
-		<span> <%= job %> </span><button id="deleteUser">Delete</button>
-	</script>
-
-	<!-- addPage -->
-	<script type="text/template" id="templateAddUsers">
-		<span><u><%= name %></u> </span>
-		(<span><%= age %></span>)
-		<span> <%= job %> </span>
-	</script>
-
-<!-- *                                                       * -->
-<!-- *                                                       * -->
-<!-- ********************* Templates ************************* -->
-
-<!-- My API -->
+<!-- My JS -->
 <script src="js/main.js"></script>
 <script src="js/Models.js"></script>
 <script src="js/Views.js"></script>
 <script src="js/Collections.js"></script>
 <script src="js/Routers.js"></script>
 <script src="js/Init.js"></script>
-	
+
 </body>
 </html>

@@ -1,48 +1,65 @@
-// Вид для вывода одного пользователя
+// View User
 App.Views.User = Backbone.View.extend( {
 
 	initialize: function(){
-		this.model.on( 'invalid', function( model, error ){
-			console.log( error );
-		} );
 
 		this.model.on( 'destroy', function(){
 			this.$el.remove();
 		}, this );
+
+		Backbone.Validation.bind( this, {
+
+	    	model: this.model,
+
+	    	valid: function( view, attr ){
+		    	
+		    	var el = view.$( '.' + attr );
+		    	el.css( 'color', '' );
+		    	
+		    },
+		    invalid: function( view, attr, error ){
+
+		    	var el = view.$( '.' + attr );
+		    	el.css( 'color', 'red' );
+		    	
+		    	$( 'body .editError' ).text( error );
+		    	$( 'body .editError' ).removeClass( 'hidden' );
+		    	//console.log( error );
+
+		    	setTimeout( function(){
+		    		$( 'body .editError' ).addClass( 'hidden' );
+		    		el.css( 'color', '' );
+		    	},2000 );
+
+		    }
+
+	    } );
 	},
 
 	tagName: 'li',
 
-	template: templateHelper( 'templateEditUsers' ),
+	template: templateHelper( 'templateListUsers' ),
 
 	render: function(){
+
 		this.$el.append( this.template( this.model.toJSON() ) );
 		return this;
+
 	},
 
 	events: {
-		'click .changeName': 'changeName',
-		'click .changeAge' : 'changeAge',
-		'click .changeJob' : 'changeJob',
 
-		'blur .changeName' : 'saveChangeName',
-		'blur .changeAge'  : 'saveChangeAge',
-		'blur .changeJob'  : 'saveChangeJob',
+		'click .change'		: 'change',
 
-		'click #deleteUser': 'deleteUser'
-	},
+		'blur .changeName'	: 'saveChangeName',
+		'blur .changeAge'	: 'saveChangeAge',
+		'blur .changeJob'	: 'saveChangeJob',
 
-	changeName: function( e ){
-
-		$( e.target ).attr( 'contenteditable', 'true' );
+		'click .deleteUser'	: 'deleteUser'
 
 	},
-	changeAge: function( e ){
 
-		$( e.target ).attr( 'contenteditable', 'true' );
-
-	},
-	changeJob: function( e ){
+	change: function( e ){
 
 		$( e.target ).attr( 'contenteditable', 'true' );
 
@@ -50,8 +67,8 @@ App.Views.User = Backbone.View.extend( {
 
 	saveChangeName: function( e ){
 		
-		this.model.set( { 'name': $( e.target ).text() }, { 'validate': true } );
-		console.log( this.model );
+		this.model.set( { name: $( e.target ).text() }, { 'validate': true } );
+		//console.log( this.model );
 		
 		$( e.target ).text( this.model.get( 'name' ) );
 		
@@ -59,7 +76,7 @@ App.Views.User = Backbone.View.extend( {
 	saveChangeAge: function( e ){
 
 		this.model.set( { 'age': $( e.target ).text() }, { 'validate': true } );
-		console.log( this.model );
+		//console.log( this.model );
 
 		$( e.target ).text( this.model.get( 'age' ) );
 
@@ -67,7 +84,7 @@ App.Views.User = Backbone.View.extend( {
 	saveChangeJob: function( e ){
 		
 		this.model.set( { 'job': $( e.target ).text() }, { 'validate': true } );
-		console.log( this.model );
+		//console.log( this.model );
 
 		$( e.target ).text( this.model.get( 'job' ) );
 
@@ -81,71 +98,98 @@ App.Views.User = Backbone.View.extend( {
 
 } );
 
-// Вид для вывода всех пользователей
+// View Users
 App.Views.Users = Backbone.View.extend( {
 
 	initialize: function(){
+
 		this.collection.on( 'add', this.addUser, this );
+
 	},
 
 	tagName: 'ul',
 
-	render: function(){				
+	render: function(){
+
 		this.collection.each( this.addUser, this );
 		return this;
+
 	},
 
 	addUser: function( model ){
+
 		var viewUser = new App.Views.User( { model: model } );
-		this.$el.append( viewUser.render().el );		
+		this.$el.append( viewUser.render().el );
+
 	}
 
 } );
 
-// Вид формы добавления ползователя
+// Add User Form
 App.Views.AddUser = Backbone.View.extend( {
 
-	initialize: function(){
-	},
-
-	el: '#addUser',
+	el: '#addUserForm',
 
 	events: {
+
 		'submit': 'submit'
+
 	},
 
 	submit: function( e ){
 
-		e.preventDefault();
-		
-		var newUseName = $( e.currentTarget ).find( '#userName' ).val();
-		var newUseAge = $( e.currentTarget ).find( '#userAge' ).val();
-		var newUseJob = $( e.currentTarget ).find( '#userJob' ).val();
+		e.preventDefault();		
 
-		var newUser = new App.Models.User();
+		var newUserModel = new App.Models.User;
 
-		var errorMes = '';
-		newUser.on( 'invalid', function( model, error ){
-			errorMes = error;
-		} );		
+		// ** validate
+		Backbone.Validation.bind( this, {
 
-		newUser.set( {
-			name: 	newUseName,
-			age: 	newUseAge,
-			job: 	newUseJob
-		}, { validate: true } );
+	    	model: newUserModel,
 
+	    	valid: function( view, attr ){
 
-		if( !errorMes ){
+		    	var el = view.$( '[name=' + attr + ']' ),
+		    		errorMsgEl = el.next( '.help-block' );
 
-			this.collection.add( newUser );		
+		    	el.attr( 'style', '' );
+		    	errorMsgEl.text( '' ).addClass( 'hidden' );
+
+		    },
+		    invalid: function( view, attr, error ){
+
+		    	//console.log( attr );
+		    	var el = view.$( '[name=' + attr + ']' ),
+		    		errorMsgEl = el.next( '.help-block' );
+
+		    	el.css( 'border', '1px solid red' );
+		    	errorMsgEl.text( error ).removeClass( 'hidden' );
+
+		    }
+
+	    } );
+
+		var newUseName 	= $( e.currentTarget ).find( '#name' ).val(),
+			newUseAge 	= $( e.currentTarget ).find( '#age' ).val(),
+			newUseJob 	= $( e.currentTarget ).find( '#job' ).val();
+
+		newUserModel.set( {
+		 	name: 	newUseName,
+		 	age: 	newUseAge,
+		 	job: 	newUseJob
+		 }, { validate: true } );
+
+		var isValid = newUserModel.isValid();
+		//console.log(isValid);		
+
+		if( isValid ){
+
+			this.collection.add( newUserModel );		
 			//console.log( this.collection.length );
-			this.$el.trigger( 'reset' );
+			this.$el.trigger( 'reset' );		
 
-		}
+		};
 
 	}
 
 } );
-
-// Проверка коллекции на удаление модели

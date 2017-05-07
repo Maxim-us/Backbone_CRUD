@@ -1,7 +1,7 @@
 // Default model
 App.Models.User = Backbone.Model.extend( {
 
-	url: 'http://js/Backbone/my_first_backbone_app/',
+	url: 'http://js/Backbone/backbone_CRUD/',
 
 	defaults: {
 		name: 	'',
@@ -9,19 +9,33 @@ App.Models.User = Backbone.Model.extend( {
 		job: 	''
 	},
 
-	validate: function( arrgs, options ){
-		if( ( ! $.trim( arrgs.name ) ) || ( ! $.trim( arrgs.age ) ) || ( ! $.trim( arrgs.job ) )  ){			
-			if( ! $.trim( arrgs.name )  ){
-				console.log( 'Empty name' );
-			}
-			if( ! $.trim( arrgs.age )  ){
-				console.log( 'Empty age' );
-			}
-			if( ! $.trim( arrgs.job )  ){
-				console.log( 'Empty job' );
-			}
-			return 'Empty fields';
-		}
+	validation: {
+
+	    name: {
+	    	required: true,
+	    	msg: 'Нужно ввести имя!'
+	    },
+	    age: [
+	    	{
+	    		required: true,
+	    		msg: 'Введите возраст!'
+	    	},
+	    	{		    	
+		    	range: [1, 80],
+		    	msg: 'Возраст должен быть от 1 до 80 лет!'
+		    }
+	    ],
+	    job: [ 
+		    {
+		    	required: true,
+		    	msg: 'Введите профессию'
+		    },
+		    {
+		    	minLength: 5,
+		    	msg: 'Напишите подробнее'
+		    }
+	    ]
+	    
 	}
 
 } );

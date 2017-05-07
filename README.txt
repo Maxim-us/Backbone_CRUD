@@ -1,0 +1,2 @@
+Backbone_CRUD - Механизм добавления, редактирования и удаления данных на клиентской стороне с помощью библиотеки Backbone (http://backbonejs.org/).
+Валидация данных производится с помощью плагина Backbone.Validation (http://thedersen.com/projects/backbone-validation/).
